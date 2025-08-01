@@ -14,7 +14,7 @@ def menu():
     time.sleep(1)
     menu()
   elif choose.upper() == "[XTSP]":
-    priv.begin()
+    priv.display()
     time.sleep(1)
     menu()
   else:

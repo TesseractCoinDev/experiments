@@ -11,6 +11,9 @@ def menu():
   choose = input(">> ")
   if choose.upper() == "[GEN]":
     gen.begin()
+    print("PRIVATE KEY: " + gen.prk)
+    print("PUBLIC KEY: " + gen.pk)
+    print("YOUR WALLET (TESTNET): " + gen.wallet)
     time.sleep(1)
     menu()
   elif choose.upper() == "[XTSP]":

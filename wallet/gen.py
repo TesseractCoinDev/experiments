@@ -7,6 +7,7 @@ pk = ""
 prk = ""
 wallet = ""
 wallet2 = ""
+sk = sk
 
 def begin():
   global pk, prk, wallet
@@ -24,7 +25,7 @@ def begin():
   wallet = "X" + b58 + "TST"
 
 def priv():
-  global pk, prk, wallet, wallet2
+  global pk, prk, wallet, wallet2, sk
   prkb = os.urandom(32)
   prk = prkb.hex()
 

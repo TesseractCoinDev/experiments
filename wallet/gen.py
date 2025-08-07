@@ -1,4 +1,4 @@
-import sha3
+import hashlib
 import os
 import base58
 import ecdsa
@@ -18,7 +18,7 @@ def begin():
   pk = pkb.hex()
 
   salty = os.urandom(10)
-  she = sha3.keccak_256(pkb + salty).digest()
+  she = hashlib.new("keccak256", pkb + salty).digest()
   b58 = base58.b58encode(she).decode()
   wallet = "X" + b58 + "TST"
   

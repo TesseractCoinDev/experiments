@@ -1,6 +1,6 @@
-# import cryptography
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM as pNET
 import os
-# import random
+import random
 import sha3
 import time
 import ecdsa
@@ -35,9 +35,40 @@ def pwalletgen():
   
   return walletp
 
-pwalletgen()
+def hex():
+  timestamp = round(time.time()).to_bytes(8, byteorder="big")
+  merkle = sha3.keccak_256(os.urandom(32)).digest()
+  tostr = "X" + base58.b58encode(sha3.keccak_256(os.urandom(32)).digest()).decode() + "TSP"
+  fromstr = "X" + base58.b58encode(sha3.keccak_256(os.urandom(32)).digest()).decode() + "TSP"
+  to = tostr.to_bytes(16, byteorder="big")
+  froms = fromstr.to_bytes(16, byteorder="big")
+  nonce = sha3.keccak_256(os.urandom(32)).digest()
+  target = sha3.keccak_256(os.urandom(32)).digest()
+  difficulty = sha3.keccak_256(os.urandom(32)).digest()
+  prevHash = sha3.keccak_256(os.urandom(32)).digest()
+  hexHash = sha3.keccak_256(timestamp + merkle + to + froms + nonce + target + difficulty + prevHash).digest()
+  return {
+    "timestamp": timestamp,
+    "merkleRoot": merkle,
+    "to": to,
+    "from": froms,
+    "prevHash": prevHash,
+    "nonce": nonce,
+    "difficulty": difficulty,
+    "target": target,
+    "hexHash": hexHash
+  }
+
+def privatenet():
+  encryptionk = pNET(public2key)
+  nunce = os.urandom(12)
+  hexdata = hex().to_bytes(32, byteorder="big")
+
+  ctxt = encryptionk.encrypt(nunce, hexdata, None)
+  return ctxt
 
 print("YOUR PRIVATE KEY ON pnet: " + private2key)
 print("YOUR PUBLIC KEY ON pnet: " + public2key)
 print("YOUR pnet BURNER WALLET: " + walletp)
+print("YOUR ENCRYPTED HEX DATA: " + privatenet())
 

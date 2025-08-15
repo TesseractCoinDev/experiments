@@ -33,5 +33,7 @@ def pwalletgen():
   
   return walletp
 
-
+print("YOUR PRIVATE KEY ON pnet: " + private2key)
+print("YOUR PUBLIC KEY ON pnet: " + public2key)
+print("YOUR pnet BURNER WALLET: " + walletp)
 

@@ -11,10 +11,11 @@ public2key = ""
 walletp = ""
 
 def pgen():
+  global private2key, public2key
   private2byte = os.urandom(32)
   private2key = private2byte.hex()
   
-  sk = private2byte.SigningKey.to_string(private2byte, curve=ecdsa.SECP256k1)
+  sk = private2byte.SigningKey.from_string(private2byte, curve=ecdsa.SECP256k1)
   vk = sk.verifying_key
 
   public2byte = vk.to_string()
@@ -23,6 +24,7 @@ def pgen():
   return private2byte
 
 def pwalletgen():
+  global walletp
   privatebytewallet = pgen()
   salt = os.urandom(10)
   times = round(time.time())
@@ -32,6 +34,8 @@ def pwalletgen():
   walletp = "X" + b58 + "TSP"
   
   return walletp
+
+pwalletgen()
 
 print("YOUR PRIVATE KEY ON pnet: " + private2key)
 print("YOUR PUBLIC KEY ON pnet: " + public2key)

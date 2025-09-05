@@ -3,9 +3,8 @@ import random
 import time
 import os
 
-coefficient = random.randint(65535, 70000)
-exponent = random.randint(1, 32)
-target = coefficient * 2**(8*(exponent - 3))
+difficulty = 2**20
+target 2**256 // difficulty
 
 while True:
   version = "1.0.0"

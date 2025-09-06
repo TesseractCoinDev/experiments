@@ -1,23 +1,27 @@
-import time
+from termcolor import colored
+from mining import linear
+from wallet import xtsp
 from wallet import gen
-from wallet import priv
 
 def menu():
-  print("MENU")
-  print("---")
-  print("[GEN] - Wallet Generation Test")
-  print("[XTSP] - Private Transaction Test")
+  print(colored("MENU", "blue", attrs=["bold"]))
+  print(colored("---", "white", attrs=["bold"]))
+  print(colored("[GEN] - Mainnet Wallet Generation Test", "green", attrs=["bold"]))
+  print(colored("[XTSP] - pnet Wallet & Transaction Test", "green", attrs=["bold"]))
+  print(colored("---", "white", attrs=["bold"]))
+  print(colored("[LM] - Linear Mining Test", "red", attrs=["bold"]))
   time.sleep(1)
   choose = input(">> ")
   if choose.upper() == "[GEN]":
-    gen.begin()
-    print("PRIVATE KEY: " + gen.prk)
-    print("PUBLIC KEY: " + gen.pk)
-    print("YOUR WALLET (TESTNET): " + gen.wallet)
+    gen.display()
     time.sleep(1)
     menu()
   elif choose.upper() == "[XTSP]":
-    priv.display()
+    xtsp.display()
+    time.sleep(1)
+    menu()
+  elif choose.upper() == "[LM]":
+    linear.display()
     time.sleep(1)
     menu()
   else:

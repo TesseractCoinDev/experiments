@@ -13,12 +13,11 @@ private = ""
 public = ""
 master = ""
 wallet = ""
-seed = ""
 mn = ""
 init = Mnemonic("english")
 
 def begin():
-  global private, public, wallet, seed, mn
+  global private, public, wallet, mn
   entropy = os.urandom(24)
   mn = init.to_mnemonic(entropy)
   seed = init.to_seed(mn, passphrase="")

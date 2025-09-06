@@ -21,7 +21,7 @@ def menu():
     time.sleep(1)
     menu()
   elif choose.upper() == "[LM]":
-    linear.display()
+    linear.mine()
     time.sleep(1)
     menu()
   else:

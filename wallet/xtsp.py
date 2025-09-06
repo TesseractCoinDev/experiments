@@ -1,52 +1,44 @@
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM as pNET
-import os
-import random
-import sha3
-import time
-import ecdsa
+from bip32utils import BIP32Key
+from mnemonic import Mnemonic
+from eth_utils import keccak
 import base58
+import time
+import os
 
-private2key = ""
-public2key = ""
-walletp = ""
+private = ""
+public = ""
+master = ""
+wallet = ""
+seed = ""
+init = Mnemonic("english")
 
-def pgen():
-  global private2key, public2key
-  private2byte = os.urandom(32)
-  private2key = private2byte.hex()
-  
-  sk = private2byte.SigningKey.from_string(private2byte, curve=ecdsa.SECP256k1)
-  vk = sk.verifying_key
+def begin():
+  global private, public, wallet, seed
+  entropy = os.urandom(24)
+  mn = init.to_mnemonic(entropy)
+  seed = init.to_seed(mn, passphrase="")
 
-  public2byte = vk.to_string()
-  public2key = public2byte.hex()
+  master = BIP32Key.fromEntropy(seed)
+  private = master.PrivateKey().hex()
+  public = master.PublicKey().hex()
 
-  return private2byte
-
-def pwalletgen():
-  global walletp
-  privatebytewallet = pgen()
-  salt = os.urandom(10)
-  times = round(time.time())
-  timestamp = times.to_bytes(8, byteorder="big")
-  keccak = sha3.keccak_256(privatebytewallet + salt + timestamp).digest()
-  b58 = base58.b58encode(keccak).decode()
-  walletp = "X" + b58 + "TSP"
-  
-  return walletp
+  kek = keccak(master.PublicKey()).digest()
+  b58 = base58.b58encode(kek).decode()
+  wallet = "X" + b58 + "TSP"
 
 def hex():
   timestamp = round(time.time()).to_bytes(8, byteorder="big")
-  merkle = sha3.keccak_256(os.urandom(32)).digest()
-  tostr = "X" + base58.b58encode(sha3.keccak_256(os.urandom(32)).digest()).decode() + "TSP"
-  fromstr = "X" + base58.b58encode(sha3.keccak_256(os.urandom(32)).digest()).decode() + "TSP"
+  merkle = [keccak(os.urandom(2)).hex() for _ in range(6)]
+  tostr = "X" + base58.b58encode(keccak(os.urandom(32)).digest()).decode() + "TSP"
+  fromstr = "X" + base58.b58encode(keccak(os.urandom(32)).digest()).decode() + "TSP"
   to = tostr.to_bytes(16, byteorder="big")
   froms = fromstr.to_bytes(16, byteorder="big")
-  nonce = sha3.keccak_256(os.urandom(32)).digest()
-  target = sha3.keccak_256(os.urandom(32)).digest()
-  difficulty = sha3.keccak_256(os.urandom(32)).digest()
-  prevHash = sha3.keccak_256(os.urandom(32)).digest()
-  hexHash = sha3.keccak_256(timestamp + merkle + to + froms + nonce + target + difficulty + prevHash).digest()
+  nonce = keccak(os.urandom(32)).digest()
+  target = keccak(os.urandom(32)).digest()
+  difficulty = keccak(os.urandom(32)).digest()
+  prevHash = keccak(os.urandom(32)).digest()
+  hexHash = keccak(timestamp + merkle + to + froms + nonce + target + difficulty + prevHash).digest()
   return {
     "timestamp": timestamp,
     "merkleRoot": merkle,
@@ -67,8 +59,8 @@ def privatenet():
   ctxt = encryptionk.encrypt(nunce, hexdata, None)
   return ctxt
 
-print("YOUR PRIVATE KEY ON pnet: " + private2key)
-print("YOUR PUBLIC KEY ON pnet: " + public2key)
-print("YOUR pnet BURNER WALLET: " + walletp)
+print("YOUR PRIVATE KEY ON pnet: " + private)
+print("YOUR PUBLIC KEY ON pnet: " + public)
+print("YOUR pnet BURNER WALLET: " + wallet)
 print("YOUR ENCRYPTED HEX DATA: " + privatenet())
 

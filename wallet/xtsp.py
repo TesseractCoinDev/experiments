@@ -64,8 +64,9 @@ def privatenet():
 begin()
 
 def display():
-  print("YOUR PRIVATE KEY ON pnet: " + private)
-  print("YOUR PUBLIC KEY ON pnet: " + public)
-  print("YOUR pnet BURNER WALLET: " + wallet)
-  print("YOUR ENCRYPTED HEX DATA: " + privatenet())
+  print(colored(f"YOUR pnet WALLET IS: {wallet}", "green", attrs=["bold"]))
+  print(colored(f"YOUR PUBLIC KEY IS: {public}", "green", attrs=["bold"]))
+  print(colored(f"YOUR PRIVATE KEY IS: {private}", "green", attrs=["bold"]))
+  print(colored(f"YOUR SEED IS: {seed.hex()}", "green", attrs=["bold"]))
+  print(colored(f"YOUR ENCRYPTED TRANSACTION IS: {privatenet()}", "green", attrs=["bold"]))
 

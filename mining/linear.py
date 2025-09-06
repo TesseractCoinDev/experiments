@@ -15,13 +15,11 @@ def mine():
     tar = target
     nonce = random.getrandbits(128)
     s = (version.encode() + "".join(prevHashes).encode() + merkle.encode() + timestamp.encode())
-    sf = s + tar.to_bytes(32, "big") + nonce.to_bytes(12, "big")
+    sf = s + tar.to_bytes(32, "big") + nonce.to_bytes(16, "big")
     hexHash = keccak(sf).hex()
     hexHeader = [{"verison": version, "prevHashes": prevHashes, "merkleRoot": merkle, "timestamp": timestamp, "target": str(tar), "nonce": str(nonce), "hexHash": hexHash}]
-    print("Mining - Current Hash:" + hexHash)
+    print("Mining - Current Hash: " + hexHash)
   
     if int(hexHash, 16) <= target:
       print("Mined")
       break
-  
-  

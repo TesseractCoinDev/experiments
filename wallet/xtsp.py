@@ -23,7 +23,7 @@ def begin():
   private = master.PrivateKey().hex()
   public = master.PublicKey().hex()
 
-  kek = keccak(master.PublicKey()).digest()
+  kek = keccak(master.PublicKey())
   b58 = base58.b58encode(kek).decode()
   wallet = "X" + b58 + "TSP"
 

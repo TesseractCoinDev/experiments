@@ -61,6 +61,8 @@ def privatenet():
   ctxt = encryptionk.encrypt(nunce, hexdata, None)
   return ctxt
 
+begin()
+
 def display():
   print("YOUR PRIVATE KEY ON pnet: " + private)
   print("YOUR PUBLIC KEY ON pnet: " + public)

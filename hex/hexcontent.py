@@ -6,17 +6,6 @@ import ecdsa
 import time
 import os
 
-# Partion Header:
-"""{
-    "version": version,
-    "timestamp": timestamp,
-    "merkleRoot": merkle.hex(),
-    "transactions": transactions.hex(),
-    "target": t.hex(),
-    "nonce": nonce.hex(),
-    "partitionHash": partitionHash.hex()
-  }"""
-
 def transaction():
     to = "X" + base58.b58encode(keccak(os.urandom(2))).decode() + "TST"
     From = "X" + base58.b58encode(keccak(os.urandom(2))).decode() + "TST"

@@ -1,3 +1,4 @@
+from termcolor import colored
 from eth_utils import keccak
 import random
 import time
@@ -18,8 +19,9 @@ def mine():
     sf = s + tar.to_bytes(32, "big") + nonce.to_bytes(16, "big")
     hexHash = keccak(sf).hex()
     hexHeader = [{"verison": version, "prevHashes": prevHashes, "merkleRoot": merkle, "timestamp": timestamp, "target": str(tar), "nonce": str(nonce), "hexHash": hexHash}]
-    print("Mining - Current Hash: " + hexHash)
+    print(colored(f"Mining - Current Hash: {hexHash}", "red", attrs=["bold"]))
   
     if int(hexHash, 16) <= target:
-      print("Mined")
+      print(colored("Hex Has Been Mined!", "red", attrs=["bold"]))
+      time.sleep(2)
       break

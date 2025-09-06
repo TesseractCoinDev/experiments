@@ -29,7 +29,7 @@ def begin():
 
   kek = keccak(master.PublicKey())
   b58 = base58.b58encode(kek).decode()
-  wallet = "X" + b58 + "TSP"
+  wallet = "X" + b58 + "TST"
 
 begin()
 

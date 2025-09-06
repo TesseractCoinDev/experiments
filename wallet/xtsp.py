@@ -27,6 +27,8 @@ def begin():
   b58 = base58.b58encode(kek).decode()
   wallet = "X" + b58 + "TSP"
 
+begin()
+
 def hex():
   timestamp = round(time.time()).to_bytes(8, byteorder="big")
   merkle = [keccak(os.urandom(2)).hex() for _ in range(6)]

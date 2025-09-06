@@ -61,8 +61,9 @@ def privatenet():
   ctxt = encryptionk.encrypt(nunce, hexdata, None)
   return ctxt
 
-print("YOUR PRIVATE KEY ON pnet: " + private)
-print("YOUR PUBLIC KEY ON pnet: " + public)
-print("YOUR pnet BURNER WALLET: " + wallet)
-print("YOUR ENCRYPTED HEX DATA: " + privatenet())
+def display():
+  print("YOUR PRIVATE KEY ON pnet: " + private)
+  print("YOUR PUBLIC KEY ON pnet: " + public)
+  print("YOUR pnet BURNER WALLET: " + wallet)
+  print("YOUR ENCRYPTED HEX DATA: " + privatenet())
 

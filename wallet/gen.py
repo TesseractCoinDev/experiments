@@ -1,5 +1,6 @@
 from bip32utils import BIP32Key
 from mnemonic import Mnemonic
+from termcolor import colored
 from eth_utils import keccak
 import base58
 import os
@@ -28,8 +29,8 @@ def begin():
 begin()
 
 def display():
-  print("YOUR testnet WALLET IS: " + wallet)
-  print("YOUR PUBLIC KEY IS: " + public)
-  print("YOUR PRIVATE KEY IS: " + private)
-  print("YOUR SEED PHRASE IS: " + seed.hex())
+  print(colored(f"YOUR testnet WALLET IS: {wallet}", "green", attrs=["bold"]))
+  print(colored(f"YOUR PUBLIC KEY IS: {public}", "green", attrs=["bold"]))
+  print(colored(f"YOUR PRIVATE KEY IS: {private}", "green", attrs=["bold"]))
+  print(colored(f"YOUR SEED IS: {seed.hex()}", "green", attrs=["bold"]))
   

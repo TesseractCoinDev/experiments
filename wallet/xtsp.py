@@ -12,10 +12,11 @@ public = ""
 master = ""
 wallet = ""
 seed = ""
+mn = ""
 init = Mnemonic("english")
 
 def begin():
-  global private, public, wallet, seed
+  global private, public, wallet, seed, mn
   entropy = os.urandom(24)
   mn = init.to_mnemonic(entropy)
   seed = init.to_seed(mn, passphrase="")
@@ -68,6 +69,6 @@ def display():
   print(colored(f"YOUR pnet WALLET IS: {wallet}", "green", attrs=["bold"]))
   print(colored(f"YOUR PUBLIC KEY IS: {public}", "green", attrs=["bold"]))
   print(colored(f"YOUR PRIVATE KEY IS: {private}", "green", attrs=["bold"]))
-  print(colored(f"YOUR SEED IS: {seed.hex()}", "green", attrs=["bold"]))
+  print(colored(f"YOUR SEED PHRASE IS: {mn}", "green", attrs=["bold"]))
   print(colored(f"YOUR ENCRYPTED TRANSACTION IS: {privatenet()}", "green", attrs=["bold"]))
 

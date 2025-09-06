@@ -25,6 +25,8 @@ def begin():
   b58 = base58.b58encode(kek).decode()
   wallet = "X" + b58 + "TST"
 
+begin()
+
 def display():
   print("YOUR testnet WALLET IS: " + wallet)
   print("YOUR PUBLIC KEY IS: " + public)

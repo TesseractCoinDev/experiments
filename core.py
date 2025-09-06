@@ -1,4 +1,5 @@
 from termcolor import colored
+from hex import hexcontent
 from mining import linear
 from wallet import xtsp
 from wallet import gen
@@ -10,6 +11,8 @@ def menu():
   print(colored("[XTSP] - pnet Wallet & Transaction Test", "green", attrs=["bold"]))
   print(colored("---", "white", attrs=["bold"]))
   print(colored("[LM] - Linear Mining Test", "red", attrs=["bold"]))
+  print(colored("---", "white", attrs=["bold"]))
+  print(colored("[HEX] - Hex Generation", "yellow", attrs=["bold"]))
   time.sleep(1)
   choose = input(">> ")
   if choose.upper() == "[GEN]":
@@ -22,6 +25,10 @@ def menu():
     menu()
   elif choose.upper() == "[LM]":
     linear.mine()
+    time.sleep(1)
+    menu()
+  elif choose.upper() == "[HEX]":
+    hexcontent.display()
     time.sleep(1)
     menu()
   else:

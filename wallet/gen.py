@@ -1,31 +1,32 @@
+from bip32utils import BIP32Key
 from mnemonic import Mnemonic
-import sha3
-import os
+from eth_utils import keccak
 import base58
-import ecdsa
+import os
 
-pk = ""
-prk = ""
+private = ""
+public = ""
+master = ""
 wallet = ""
 seed = ""
 init = Mnemonic("english")
 
 def begin():
-  global pk, prk, wallet
-  prkb = os.urandom(32)
-  prk = prkb.hex()
-  seed = init.to_mnemonic(prkb)
+  global private, public, wallet, seed
+  entropy = os.urandom(24)
+  mn = init.to_mnemonic(entropy)
+  seed = init.to_seed(mn, passphrase="")
 
-  sk = ecdsa.SigningKey.from_string(prkb, curve=ecdsa.SECP256k1)
-  vk = sk.verifying_key
-  pkb = vk.to_string()
-  pk = pkb.hex()
+  master = BIP32Key.fromEntropy(seed)
+  private = master.PrivateKey().hex()
+  public = master.PublicKey().hex()
 
-  salty = os.urandom(10)
-  she = sha3.keccak_256(pkb + salty).digest()
-  b58 = base58.b58encode(she).decode()
+  kek = keccak(master.PublicKey()).digest()
+  b58 = base58.b58encode(kek).decode()
   wallet = "X" + b58 + "TST"
 
 print("YOUR testnet WALLET IS: " + wallet)
+print("YOUR PUBLIC KEY IS: " + public)
+print("YOUR PRIVATE KEY IS: " + private)
 print("YOUR SEED PHRASE IS: " + seed)
   

@@ -4,7 +4,7 @@ import time
 import os
 
 difficulty = 2**20
-target 2**256 // difficulty
+target = 2**256 // difficulty
 
 def mine():
   while True:

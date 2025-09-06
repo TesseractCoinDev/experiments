@@ -21,12 +21,12 @@ def begin():
   private = master.PrivateKey().hex()
   public = master.PublicKey().hex()
 
-  kek = keccak(master.PublicKey()).digest()
+  kek = keccak(master.PublicKey())
   b58 = base58.b58encode(kek).decode()
   wallet = "X" + b58 + "TST"
 
 print("YOUR testnet WALLET IS: " + wallet)
 print("YOUR PUBLIC KEY IS: " + public)
 print("YOUR PRIVATE KEY IS: " + private)
-print("YOUR SEED PHRASE IS: " + seed)
+print("YOUR SEED PHRASE IS: " + seed.hex())
   

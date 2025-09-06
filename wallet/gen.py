@@ -69,5 +69,5 @@ def display():
   print(colored(f"YOUR pnet WALLET IS: {wallet}", "green", attrs=["bold"]))
   print(colored(f"YOUR PUBLIC KEY IS: {public}", "green", attrs=["bold"]))
   print(colored(f"YOUR PRIVATE KEY IS: {private}", "green", attrs=["bold"]))
-  print(colored(f"YOUR SEED IS: {seed.hex()}", "green", attrs=["bold"]))
+  print(colored(f"YOUR SEED PHRASE IS: {mn}", "green", attrs=["bold"]))
   print(colored(f"YOUR ENCRYPTED TRANSACTION IS: {privatenet().hex()}", "green", attrs=["bold"]))

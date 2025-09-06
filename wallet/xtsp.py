@@ -3,8 +3,10 @@ from bip32utils import BIP32Key
 from mnemonic import Mnemonic
 from termcolor import colored
 from eth_utils import keccak
+import random
 import base58
 import time
+import json
 import os
 
 private = ""
@@ -12,11 +14,10 @@ public = ""
 master = ""
 wallet = ""
 seed = ""
-mn = ""
 init = Mnemonic("english")
 
 def begin():
-  global private, public, wallet, seed, mn
+  global private, public, wallet, seed
   entropy = os.urandom(24)
   mn = init.to_mnemonic(entropy)
   seed = init.to_seed(mn, passphrase="")
@@ -32,35 +33,34 @@ def begin():
 begin()
 
 def hex():
-  timestamp = round(time.time()).to_bytes(8, byteorder="big")
+  timestamp = str(time.time())
   merkle = [keccak(os.urandom(2)).hex() for _ in range(6)]
-  tostr = "X" + base58.b58encode(keccak(os.urandom(32)).digest()).decode() + "TSP"
-  fromstr = "X" + base58.b58encode(keccak(os.urandom(32)).digest()).decode() + "TSP"
-  to = tostr.to_bytes(16, byteorder="big")
-  froms = fromstr.to_bytes(16, byteorder="big")
-  nonce = keccak(os.urandom(32)).digest()
-  target = keccak(os.urandom(32)).digest()
-  difficulty = keccak(os.urandom(32)).digest()
-  prevHash = keccak(os.urandom(32)).digest()
-  hexHash = keccak(timestamp + merkle + to + froms + nonce + target + difficulty + prevHash).digest()
+  to = "X" + base58.b58encode(keccak(os.urandom(32))).decode() + "TSP"
+  froms = "X" + base58.b58encode(keccak(os.urandom(32))).decode() + "TSP"
+  nonce = random.getrandbits(128)
+  difficulty = 2**20
+  target = 2**256 // difficulty
+  prevHash = keccak(os.urandom(32))
+  s = (timestamp.encode("utf-8") + to.encode("utf-8") + froms.encode("utf-8") + prevHash)
+  final = s + target.to_bytes(32, "big") + nonce.to_bytes(16, "big")
+  hexHash = keccak(final).hex()
   return {
     "timestamp": timestamp,
     "merkleRoot": merkle,
     "to": to,
     "from": froms,
-    "prevHash": prevHash,
+    "prevHash": prevHash.hex(),
     "nonce": nonce,
-    "difficulty": difficulty,
     "target": target,
     "hexHash": hexHash
   }
 
 def privatenet():
-  encryptionk = pNET(public2key)
+  encryptionk = pNET(keccak(bytes.fromhex(public)))
+  transaction = json.dumps(hex()).encode()
   nunce = os.urandom(12)
-  hexdata = hex().to_bytes(32, byteorder="big")
 
-  ctxt = encryptionk.encrypt(nunce, hexdata, None)
+  ctxt = encryptionk.encrypt(nunce, transaction, None)
   return ctxt
 
 begin()
@@ -69,6 +69,7 @@ def display():
   print(colored(f"YOUR pnet WALLET IS: {wallet}", "green", attrs=["bold"]))
   print(colored(f"YOUR PUBLIC KEY IS: {public}", "green", attrs=["bold"]))
   print(colored(f"YOUR PRIVATE KEY IS: {private}", "green", attrs=["bold"]))
-  print(colored(f"YOUR SEED PHRASE IS: {mn}", "green", attrs=["bold"]))
-  print(colored(f"YOUR ENCRYPTED TRANSACTION IS: {privatenet()}", "green", attrs=["bold"]))
+  print(colored(f"YOUR SEED IS: {mn}", "green", attrs=["bold"]))
+  print(colored(f"YOUR ENCRYPTED TRANSACTION IS: {privatenet().hex()}", "green", attrs=["bold"]))
 
+display

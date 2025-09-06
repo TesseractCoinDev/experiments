@@ -25,10 +25,9 @@ def begin():
   b58 = base58.b58encode(kek).decode()
   wallet = "X" + b58 + "TST"
 
-begin()
-
-print("YOUR testnet WALLET IS: " + wallet)
-print("YOUR PUBLIC KEY IS: " + public)
-print("YOUR PRIVATE KEY IS: " + private)
-print("YOUR SEED PHRASE IS: " + seed.hex())
+def display():
+  print("YOUR testnet WALLET IS: " + wallet)
+  print("YOUR PUBLIC KEY IS: " + public)
+  print("YOUR PRIVATE KEY IS: " + private)
+  print("YOUR SEED PHRASE IS: " + seed.hex())
   

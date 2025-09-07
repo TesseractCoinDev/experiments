@@ -17,7 +17,7 @@ seed = ""
 init = Mnemonic("english")
 
 def begin():
-  global private, public, wallet, seed
+  global private, public, wallet, mn
   entropy = os.urandom(24)
   mn = init.to_mnemonic(entropy)
   seed = init.to_seed(mn, passphrase="")
@@ -25,9 +25,12 @@ def begin():
   master = BIP32Key.fromEntropy(seed)
   private = master.PrivateKey().hex()
   public = master.PublicKey().hex()
-
-  kek = keccak(master.PublicKey())
-  b58 = base58.b58encode(kek).decode()
+  testnet = bytes([0x54])
+  mainnet = bytes([0x58])
+  pnet = bytes([0x50])
+  pubkeyh = keccak(master.PublicKey())[:20]
+  checksum = keccak(keccak(pnet + pubkeyh))[:4]
+  b58 = base58.b58encode(pnet + pubkeyh + checksum).decode()
   wallet = "X" + b58 + "TSP"
 
 begin()

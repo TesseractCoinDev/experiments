@@ -14,10 +14,10 @@ def mine():
     merkle = keccak(os.urandom(2)).hex()
     timestamp = str(time.time())
     tar = target
-    nonce = random.getrandbits(128)
+    nonce = random.getrandbits(80)
     s = (version.encode() + "".join(prevHashes).encode() + merkle.encode() + timestamp.encode())
     sf = s + tar.to_bytes(32, "big") + nonce.to_bytes(16, "big")
-    hexHash = keccak(sf).hex()
+    hexHash = keccak(keccak(sf)).hex()
     hexHeader = [{"verison": version, "prevHashes": prevHashes, "merkleRoot": merkle, "timestamp": timestamp, "target": str(tar), "nonce": str(nonce), "hexHash": hexHash}]
     print(colored(f"Mining - Current Hash: {hexHash}", "red", attrs=["bold"]))
   

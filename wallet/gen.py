@@ -24,9 +24,12 @@ def begin():
   master = BIP32Key.fromEntropy(seed)
   private = master.PrivateKey().hex()
   public = master.PublicKey().hex()
-
-  kek = keccak(master.PublicKey())
-  b58 = base58.b58encode(kek).decode()
+  testnet = bytes([0x54])
+  mainnet = bytes([0x58])
+  pnet = bytes([0x50])
+  pubkeyh = keccak(master.PublicKey())[:20]
+  checksum = keccak(keccak(testnet + pubkeyh))[:4]
+  b58 = base58.b58encode(testnet + pubkeyh + checksum).decode()
   wallet = "X" + b58 + "TST"
 
 begin()

@@ -4,8 +4,6 @@ from termcolor import colored
 from eth_utils import keccak
 import random
 import base58
-import time
-import json
 import os
 
 private = ""

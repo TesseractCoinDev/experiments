@@ -1,4 +1,3 @@
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM as pNET
 from bip32utils import BIP32Key
 from mnemonic import Mnemonic
 from termcolor import colored

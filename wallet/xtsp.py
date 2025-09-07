@@ -31,7 +31,15 @@ def begin():
   pubkeyh = keccak(master.PublicKey())[:20]
   checksum = keccak(keccak(pnet + pubkeyh))[:4]
   b58 = base58.b58encode(pnet + pubkeyh + checksum).decode()
-  wallet = "X" + b58 + "TSP"
+
+  extract = base58.b58decode(b58)
+  versione = extract[0:1]
+  pubhash = extract[1:21]
+  checksume = extract[21:25]
+  if keccak(keccak(versione + pubhash))[:4] == checksume:
+    wallet = "X" + b58 + "TSP"
+  else:
+    print(colored("[!] - Invalid Checksum, wallet is invalid.", "red", attrs=["bold"]))
 
 begin()
 

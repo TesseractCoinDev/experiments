@@ -48,7 +48,6 @@ def header():
   prevHashes = [keccak(os.urandom(2)) for _ in range(6)]
   merkle = keccak(os.urandom(2))
   timestamp = str(time.time())
-  op = 2**256 // 2**20
   part = [partition() for _ in range(768)]
   finalized = False
   static = version.encode("utf-8") + prevHashes + merkle + timestamp.encode("utf-8") + part.encode("utf-8") + str(finalized).encode("utf-8")

@@ -65,14 +65,15 @@ def genisispartition():
       txids = merklep
   merkleRoot = txids[0]  
   partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
-  return {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash
+  weight = len(str(version)) + len(merkleRoot.hex()) + len(sub_target.hex()) + len(str(nonce)) + len(partitionHash.hex())
+  return {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash, weight
 
 def hex():
   version = 1
   timestamp = str(time.time())
   height = 1
   prevHash = "0"*64
-  partitions = [genisispartition()[1] for _ in range(768)]
+  partitions = [genisispartition()[1] for _ in range(10)]
   while len(partitions) > 1:
       if len(partitions) % 2 == 1:
           partitions.append(partitions[-1])
@@ -82,13 +83,18 @@ def hex():
       partitions = merkleh
   merkleRoot = partitions[0]
   hexHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleRoot + height.to_bytes((height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
-  return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}
+  weight = len(str(version)) + len(prevHash) + len(str(height)) + len(merkleRoot.hex()) + len(timestamp) + len(hexHash)
+  return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}, weight
 
-print(colored("HEX HEADER:", "white", attrs=["bold"]))
-print(colored(hex(), "green", attrs=["bold"]))
+print(colored(f"HEX HEADER ({str(hex()[1])} BITS): ", "white", attrs=["bold"]))
+print(colored(hex()[0], "green", attrs=["bold"]))
 print("")
-print(colored("PARTITION HEADER:", "white", attrs=["bold"]))
+print(colored(f"PARTITION HEADER ({str(genisispartition()[2])} BITS):", "white", attrs=["bold"]))
 print(colored(genisispartition()[0], "green", attrs=["bold"]))
 print("")
-print(colored("TRANSACTION METADATA:", "white", attrs=["bold"]))
+print(colored(f"TRANSACTION METADATA ({str(transaction()[2])} BITS):", "white", attrs=["bold"]))
 print(colored(transaction()[0], "green", attrs=["bold"]))
+print("")
+print(colored("STATS:", "white", attrs=["bold"]))
+equ = ((hex()[1]) + (genisispartition()[2] * 768) + (transaction()[2] * 35951)) / 8
+print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES", "white", attrs=["bold"]))

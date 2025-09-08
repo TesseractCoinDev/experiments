@@ -25,7 +25,7 @@ def genadd():
 
   testnet = bytes([ord('T')])
   pubhash = keccak(public)[:20]
-  checksum = keccak(keccak(testnet + pubhash))
+  checksum = keccak(keccak(testnet + pubhash))[:4]
   prewallet = base58.b58encode(testnet + pubhash + checksum).decode()
 
   extraction = base58.b58decode(prewallet)

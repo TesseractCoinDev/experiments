@@ -41,7 +41,7 @@ def genadd():
 def transaction():
   toAddress = genadd()[0]
   fromAddress = genadd()[0]
-  amount = random.randint(1, 1000)
+  amount = random.getrandbits(round(time.time())
   timestamp = str(time.time())
   fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.0001
   signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))

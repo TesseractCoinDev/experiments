@@ -62,5 +62,7 @@ def genisispartition():
           merklep.append(keccak(txids[h] + txids[h+1]))
       txids = merklep
   merkleRoot = txids[0]  
-  partitionHash = keccak(keccak(
+  prevHash = "0"*64
+  partitionHash = keccak(keccak(version.to_bytes(version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + nonce.to_bytes(nonce.bit_length() + 7) // 8, "big") + subtarget + merkleroot + prevHash.encode("utf-8")))
+  return {"version": version, "prevHash": prevHash, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash
   

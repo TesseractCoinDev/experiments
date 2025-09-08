@@ -32,7 +32,7 @@ def genadd():
   version = extraction[0:1]
   pubHash = extraction[1:21]
   checkSum = extraction[21:25]
-  if keccak(keccak(version + pubHash)) == checkSum:
+  if keccak(keccak(version + pubHash))[:4] == checkSum:
     wallet = "X" + pre + "TST"
     return wallet, private
   else:

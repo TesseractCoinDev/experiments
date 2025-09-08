@@ -62,7 +62,31 @@ def genisispartition():
           merklep.append(keccak(txids[h] + txids[h+1]))
       txids = merklep
   merkleRoot = txids[0]  
-  prevHash = "0"*64
-  partitionHash = keccak(keccak(version.to_bytes(version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + nonce.to_bytes(nonce.bit_length() + 7) // 8, "big") + subtarget + merkleroot + prevHash.encode("utf-8")))
+  partitionHash = keccak(keccak(version.to_bytes(version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + nonce.to_bytes(nonce.bit_length() + 7) // 8, "big") + subtarget + merkleroot))
   return {"version": version, "prevHash": prevHash, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash
-  
+
+def hex():
+  verision = 1
+  timestamp = str(time.time())
+  height = 1
+  prevHash = "0"*64
+  partitions = [genisispartition()[1], for _ in range(768)]
+  while len(partitions) > 1:
+      if len(partitions) % 2 == 1:
+          partitions.append(partitions[-1])
+      merkleh = []
+      for h in range(0, len(partitions), 2):
+          merkleh.append(keccak(partitions[h] + partitions[h+1]))
+      partitions = merkleh
+  merkleRoot = partitions[0]
+  hexHash = keccak(keccak(version.to_bytes(version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleroot + height.to_bytes(height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
+  return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}
+
+print(colored("HEX HEADER:", "white", attrs=["bold"]))
+print(colored(hex(), "green", attrs=["bold"]))
+print("")
+print(colored("PARTITION HEADER:", "white", attrs=["bold"]))
+print(colored(genesispartition()[0], "green", attrs=["bold"]))
+print("")
+print(colored("TRANSACTION METADATA:", "white", attrs=["bold"]))
+print(colored(transaction()[0], "green", attrs=["bold"]))

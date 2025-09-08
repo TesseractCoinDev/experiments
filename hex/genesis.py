@@ -47,5 +47,20 @@ def transaction():
   weight = len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp) + len(str(fee)) + len(signature.hex()) + len(txid.hex())
   return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature, "txid": txid}, txid, weight
 
-def partition():
+def genisispartition():
+  version = 1
+  timestamp = str(time.time())
+  nonce = random.getrandbits(80)
+  sub_target = subtarget.to_bytes(subtarget.bit_length() + 7) // 8, "big")
+  transactioneq = 35951 // 768
+  txids = [transaction()[1], for _ in range(transactioneq)]
+  while len(txids) > 1:
+      if len(txids) % 2 == 1:
+          txids.append(txids[-1])
+      merklep = []
+      for p in range(0, len(txids), 2):
+          merklep.append(keccak(txids[h] + txids[h+1]))
+      txids = merklep
+  merkleRoot = txids[0]  
+  partitionHash = keccak(keccak(
   

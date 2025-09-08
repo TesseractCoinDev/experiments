@@ -46,7 +46,7 @@ def transaction():
   signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))
   txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + signature)
   weight = len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp) + len(str(fee)) + len(signature.hex()) + len(txid.hex())
-  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature, "txid": txid}, txid, weight
+  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature.hex(), "txid": txid.hex()}, txid, weight
 
 def genisispartition():
   version = 1
@@ -67,7 +67,7 @@ def genisispartition():
   return {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash
 
 def hex():
-  verision = 1
+  version = 1
   timestamp = str(time.time())
   height = 1
   prevHash = "0"*64
@@ -87,7 +87,7 @@ print(colored("HEX HEADER:", "white", attrs=["bold"]))
 print(colored(hex(), "green", attrs=["bold"]))
 print("")
 print(colored("PARTITION HEADER:", "white", attrs=["bold"]))
-print(colored(genesispartition()[0], "green", attrs=["bold"]))
+print(colored(genisispartition()[0], "green", attrs=["bold"]))
 print("")
 print(colored("TRANSACTION METADATA:", "white", attrs=["bold"]))
 print(colored(transaction()[0], "green", attrs=["bold"]))

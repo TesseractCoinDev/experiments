@@ -9,10 +9,11 @@ import time
 import os
 
 subdifficulty = 100000 * 0.028
-subtarget = 2**256 / subdifficulty
+subtarget = 2**256 // round(subdifficulty)
 mnemonics = Mnemonic("english")
 
 def genadd():
+  global signing
   entropy = os.urandom(16)
   seedphrase = mnemonics.to_mnemonic(entropy)
   seed = mnemonics.to_seed(seedphrase, passphrase="")
@@ -22,7 +23,7 @@ def genadd():
   public = master.PublicKey()
   signing = ecdsa.SigningKey.from_string(private, curve=ecdsa.SECP256k1)
 
-  testnet = bytess([ord('T'])
+  testnet = bytes([ord('T')])
   pubhash = keccak(public)[:20]
   checksum = keccak(keccak(testnet + pubhash))
   prewallet = base58.b58encode(testnet + pubhash + checksum).decode()
@@ -32,7 +33,7 @@ def genadd():
   pubHash = extraction[1:21]
   checkSum = extraction[21:25]
   if keccak(keccak(version + pubHash)) == checkSum:
-    return "X" + pre + "TST", private, signing
+    return "X" + pre + "TST", private
   else:
     return "Invalid"
 
@@ -42,8 +43,8 @@ def transaction():
   amount = random.randint(1, 1000)
   timestamp = str(time.time())
   fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.0001
-  signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + fee.to_bytes((fee.bit_length() + 7) // 8, "big")))
-  txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + fee.to_bytes((fee.bit_length() + 7) // 8, "big") + signature)
+  signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))
+  txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + signature)
   weight = len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp) + len(str(fee)) + len(signature.hex()) + len(txid.hex())
   return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature, "txid": txid}, txid, weight
 
@@ -51,26 +52,26 @@ def genisispartition():
   version = 1
   timestamp = str(time.time())
   nonce = random.getrandbits(80)
-  sub_target = subtarget.to_bytes(subtarget.bit_length() + 7) // 8, "big")
+  sub_target = subtarget.to_bytes((subtarget.bit_length() + 7) // 8, "big")
   transactioneq = 35951 // 768
-  txids = [transaction()[1], for _ in range(transactioneq)]
+  txids = [transaction()[1] for _ in range(transactioneq)]
   while len(txids) > 1:
       if len(txids) % 2 == 1:
           txids.append(txids[-1])
       merklep = []
       for p in range(0, len(txids), 2):
-          merklep.append(keccak(txids[h] + txids[h+1]))
+          merklep.append(keccak(txids[p] + txids[p+1]))
       txids = merklep
   merkleRoot = txids[0]  
-  partitionHash = keccak(keccak(version.to_bytes(version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + nonce.to_bytes(nonce.bit_length() + 7) // 8, "big") + subtarget + merkleroot))
-  return {"version": version, "prevHash": prevHash, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash
+  partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
+  return {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash
 
 def hex():
   verision = 1
   timestamp = str(time.time())
   height = 1
   prevHash = "0"*64
-  partitions = [genisispartition()[1], for _ in range(768)]
+  partitions = [genisispartition()[1] for _ in range(768)]
   while len(partitions) > 1:
       if len(partitions) % 2 == 1:
           partitions.append(partitions[-1])
@@ -79,7 +80,7 @@ def hex():
           merkleh.append(keccak(partitions[h] + partitions[h+1]))
       partitions = merkleh
   merkleRoot = partitions[0]
-  hexHash = keccak(keccak(version.to_bytes(version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleroot + height.to_bytes(height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
+  hexHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleRoot + height.to_bytes((height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
   return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}
 
 print(colored("HEX HEADER:", "white", attrs=["bold"]))

@@ -53,10 +53,9 @@ def partition():
   version = 1
   timestamp = str(time.time())
   nonce = 0
-  if nonce <= 2**80:
-    nonce += 1
-  elif nonce > 2**80:
-    nonce = 2**80
+  for counts in range(1, 2**80, +1):
+    nonce = counts
+    pass
   sub_target = subtarget.to_bytes((subtarget.bit_length() + 7) // 8, "big")
   transactioneq = 35951 // 768
   txids = [transaction()[1] for _ in range(transactioneq)]

@@ -86,16 +86,17 @@ def hex():
   weight = len(str(version)) + len(prevHash) + len(str(height)) + len(merkleRoot.hex()) + len(timestamp) + len(hexHash)
   return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}, weight
 
-print(colored(f"HEX HEADER ({str(hex()[1])} BITS): ", "white", attrs=["bold"]))
-print(colored(hex()[0], "green", attrs=["bold"]))
-print("")
-print(colored(f"PARTITION HEADER ({str(genisispartition()[2])} BITS):", "white", attrs=["bold"]))
-print(colored(genisispartition()[0], "green", attrs=["bold"]))
-print("")
-print(colored(f"TRANSACTION METADATA ({str(transaction()[2])} BITS):", "white", attrs=["bold"]))
-print(colored(transaction()[0], "green", attrs=["bold"]))
-print("")
-print(colored("STATS:", "white", attrs=["bold"]))
-equ = ((hex()[1]) + (genisispartition()[2] * 768) + (transaction()[2] * 35951)) / 8
-percent = (equ / 1500000) * 100
-print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES, APPROXIMATELY {str(percent)}% OF THE 1.5 MB CAP.", "white", attrs=["bold"]))
+def display():
+  print(colored(f"HEX HEADER ({str(hex()[1])} BITS): ", "white", attrs=["bold"]))
+  print(colored(hex()[0], "green", attrs=["bold"]))
+  print("")
+  print(colored(f"PARTITION HEADER ({str(genisispartition()[2])} BITS):", "white", attrs=["bold"]))
+  print(colored(genisispartition()[0], "green", attrs=["bold"]))
+  print("")
+  print(colored(f"TRANSACTION METADATA ({str(transaction()[2])} BITS):", "white", attrs=["bold"]))
+  print(colored(transaction()[0], "green", attrs=["bold"]))
+  print("")
+  print(colored("STATS:", "white", attrs=["bold"]))
+  equ = ((hex()[1]) + (genisispartition()[2] * 768) + (transaction()[2] * 35951)) / 8
+  percent = (equ / 1500000) * 100
+  print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES, APPROXIMATELY {str(percent)}% OF THE 1.5 MB CAP.", "white", attrs=["bold"]))

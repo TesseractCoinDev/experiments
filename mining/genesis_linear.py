@@ -91,7 +91,9 @@ def hex():
   return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}, weight
 
 def mine():
+  print(colored("[!] - MINING BEGUN", "green", attrs=["bold"]))
   for all in range(768):
+    count = 0
     if int(partition()[1].hex(), 16) <= subtarget:
       count += 1
       print(colored(f"[!] - Partition #{str(count)} Has Been Mined", "green", attrs=["bold"]))

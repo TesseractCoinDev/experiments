@@ -49,7 +49,7 @@ def transaction():
   weight = len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp) + len(str(fee)) + len(signature.hex()) + len(txid.hex())
   return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature.hex(), "txid": txid.hex()}, txid, weight
 
-def genisispartition():
+def partition():
   version = 1
   timestamp = str(time.time())
   nonce = random.getrandbits(80)
@@ -73,7 +73,7 @@ def hex():
   timestamp = str(time.time())
   height = 1
   prevHash = "0"*64
-  partitions = [genisispartition()[1] for _ in range(768)]
+  partitions = [partition()[1] for _ in range(768)]
   while len(partitions) > 1:
       if len(partitions) % 2 == 1:
           partitions.append(partitions[-1])
@@ -90,13 +90,13 @@ def display():
   print(colored(f"HEX HEADER ({str(hex()[1])} BITS): ", "white", attrs=["bold"]))
   print(colored(hex()[0], "green", attrs=["bold"]))
   print("")
-  print(colored(f"PARTITION HEADER ({str(genisispartition()[2])} BITS):", "white", attrs=["bold"]))
-  print(colored(genisispartition()[0], "green", attrs=["bold"]))
+  print(colored(f"PARTITION HEADER ({str(partition()[2])} BITS):", "white", attrs=["bold"]))
+  print(colored(partition()[0], "green", attrs=["bold"]))
   print("")
   print(colored(f"TRANSACTION METADATA ({str(transaction()[2])} BITS):", "white", attrs=["bold"]))
   print(colored(transaction()[0], "green", attrs=["bold"]))
   print("")
   print(colored("STATS:", "white", attrs=["bold"]))
-  equ = ((hex()[1]) + (genisispartition()[2] * 768) + (transaction()[2] * 35951)) / 8
+  equ = ((hex()[1]) + (partition()[2] * 768) + (transaction()[2] * 35951)) / 8
   percent = (equ / 1500000) * 100
   print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES, APPROXIMATELY {str(percent)}% OF THE 1.5 MB CAP.", "white", attrs=["bold"]))

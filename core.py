@@ -1,5 +1,5 @@
+from mining import genesis_no_progpow
 from termcolor import colored
-from mining import linear
 from hex import genesis
 from wallet import xtsp
 from wallet import gen
@@ -10,7 +10,7 @@ def menu():
   print(colored("[GEN] - Mainnet Wallet Generation Test", "green", attrs=["bold"]))
   print(colored("[XTSP] - pnet Wallet & Transaction Test", "green", attrs=["bold"]))
   print(colored("---", "white", attrs=["bold"]))
-  print(colored("[LM] - Linear Mining Test", "red", attrs=["bold"]))
+  print(colored("[GMN] - Genesis Mining (No ProgPoW)", "red", attrs=["bold"]))
   print(colored("---", "white", attrs=["bold"]))
   print(colored("[GENESIS] - Genesis Hex Generation", "yellow", attrs=["bold"]))
   time.sleep(1)
@@ -23,8 +23,8 @@ def menu():
     xtsp.display()
     time.sleep(1)
     menu()
-  elif choose.upper() == "[LM]":
-    linear.mine()
+  elif choose.upper() == "[GMN]":
+    genesis_no_progpow.mine()
     time.sleep(1)
     menu()
   elif choose.upper() == "[GENESIS]":

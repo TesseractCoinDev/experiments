@@ -3,6 +3,7 @@ from mnemonic import Mnemonic
 from termcolor import colored
 from eth_utils import keccak
 import base58
+import random
 import ecdsa
 import time
 import os
@@ -91,7 +92,7 @@ def hex():
 
 def mine():
   for all in range(768):
-    if int(partition()[1], 16) <= subtarget:
+    if int(partition()[1].hex(), 16) <= subtarget:
       count += 1
       print(colored(f"[!] - Partition #{str(count)} Has Been Mined", "green", attrs=["bold"]))
       break

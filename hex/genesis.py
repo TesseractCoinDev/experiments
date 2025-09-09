@@ -73,7 +73,7 @@ def hex():
   timestamp = str(time.time())
   height = 1
   prevHash = "0"*64
-  partitions = [genisispartition()[1] for _ in range(10)]
+  partitions = [genisispartition()[1] for _ in range(768)]
   while len(partitions) > 1:
       if len(partitions) % 2 == 1:
           partitions.append(partitions[-1])

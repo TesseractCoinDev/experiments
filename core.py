@@ -1,6 +1,6 @@
 from termcolor import colored
-from hex import hexcontent
 from mining import linear
+from hex import genesis
 from wallet import xtsp
 from wallet import gen
 
@@ -12,7 +12,7 @@ def menu():
   print(colored("---", "white", attrs=["bold"]))
   print(colored("[LM] - Linear Mining Test", "red", attrs=["bold"]))
   print(colored("---", "white", attrs=["bold"]))
-  print(colored("[HEX] - Hex Generation", "yellow", attrs=["bold"]))
+  print(colored("[GENESIS] - Genesis Hex Generation", "yellow", attrs=["bold"]))
   time.sleep(1)
   choose = input(">> ")
   if choose.upper() == "[GEN]":
@@ -27,8 +27,8 @@ def menu():
     linear.mine()
     time.sleep(1)
     menu()
-  elif choose.upper() == "[HEX]":
-    hexcontent.display()
+  elif choose.upper() == "[GENESIS]":
+    genesis.display()
     time.sleep(1)
     menu()
   else:

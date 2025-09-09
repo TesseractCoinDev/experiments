@@ -97,4 +97,5 @@ print(colored(transaction()[0], "green", attrs=["bold"]))
 print("")
 print(colored("STATS:", "white", attrs=["bold"]))
 equ = ((hex()[1]) + (genisispartition()[2] * 768) + (transaction()[2] * 35951)) / 8
-print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES", "white", attrs=["bold"]))
+percent = (equ / 1500000) * 100
+print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES, APPROXIMATELY {str(percent)}% OF THE 1.5 MB CAP.", "white", attrs=["bold"]))

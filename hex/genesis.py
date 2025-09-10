@@ -14,7 +14,7 @@ mnemonics = Mnemonic("english")
 
 def genadd():
   global signing
-  entropy = os.urandom(16)
+  entropy = os.urandom(24)
   seedphrase = mnemonics.to_mnemonic(entropy)
   seed = mnemonics.to_seed(seedphrase, passphrase="")
 

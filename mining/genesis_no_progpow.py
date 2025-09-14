@@ -66,7 +66,12 @@ def partition():
   merkleRoot = txids[0]  
   partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
   weight = len(str(version)) + len(merkleRoot.hex()) + len(sub_target.hex()) + len(str(nonce)) + len(partitionHash.hex())
-  return {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()}, partitionHash, weight
+  partitionData = 
+  {
+    "header": {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()},
+    "body": [transaction()[0] for _ in range(transactioneq)]
+  }
+  return partitionHash, partitionHash, weight
 
 def hex():
   version = 1
@@ -84,8 +89,13 @@ def hex():
   merkleRoot = partitions[0]
   hexHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleRoot + height.to_bytes((height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
   weight = len(str(version)) + len(prevHash) + len(str(height)) + len(merkleRoot.hex()) + len(timestamp) + len(hexHash)
-  return {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()}, weight
-
+  hexData =
+  {
+    "header": {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
+    "body": [partition()[0] for _ in range(768)]
+  }
+  return hexData, weight
+  
 def mine():
   print(colored("[!] - MINING BEGUN", "green", attrs=["bold"]))
   for all in range(768):

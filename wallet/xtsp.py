@@ -1,5 +1,6 @@
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM as pNET
 from bip32utils import BIP32Key
+from Crypto.Hash import RIPEMD
 from mnemonic import Mnemonic
 from termcolor import colored
 from eth_utils import keccak
@@ -28,7 +29,8 @@ def begin():
   testnet = bytes([0x54])
   mainnet = bytes([0x58])
   pnet = bytes([0x50])
-  pubkeyh = keccak(master.PublicKey())[:20]
+  ripemd = RIPEMD.new(master.PublicKey())
+  pubkeyh = ripemd.digest()
   checksum = keccak(keccak(pnet + pubkeyh))[:4]
   b58 = base58.b58encode(pnet + pubkeyh + checksum).decode()
 

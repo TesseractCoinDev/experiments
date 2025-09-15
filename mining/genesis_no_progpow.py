@@ -1,4 +1,5 @@
 from bip32utils import BIP32Key
+from Crypto.Hash import RIPEMD
 from mnemonic import Mnemonic
 from termcolor import colored
 from eth_utils import keccak
@@ -24,7 +25,8 @@ def genadd():
   signing = ecdsa.SigningKey.from_string(private, curve=ecdsa.SECP256k1)
 
   testnet = bytes([ord('T')])
-  pubhash = keccak(public)[:20]
+  ripemd = RIPEMND.new(master.PublicKey())
+  pubhash = ripemd.digest()
   checksum = keccak(keccak(testnet + pubhash))[:4]
   pre = base58.b58encode(testnet + pubhash + checksum).decode()
 

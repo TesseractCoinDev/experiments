@@ -64,16 +64,7 @@ def ptransaction():
   fromAddressE = pnet.encrypt(fromAddress.encode("utf-8"), nonce, None).hex()
   signatureE = pnet.encrypt(signature, nonce, None).hex()
 
-  transaction =
-  {
-    "timestamp": timestampE,
-    "amount": amountE,
-    "to": toAddressE,
-    "from": fromAddressE,
-    "signature": signatureE,
-    "txid": txid
-  }
-  return transaction
+  return {"timestamp": timestampE, "amount": amountE, "to": toAddressE, "from": fromAddressE, "signature": signatureE, "txid": txid}
 
 def display():
   print(colored(ptransaction(), "green", attrs=["bold"]))

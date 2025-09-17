@@ -24,7 +24,7 @@ def genadd():
   public = master.PublicKey()
   signing = ecdsa.SigningKey.from_string(private, curve=ecdsa.SECP256k1)
 
-  testnet = bytes([ord('T')])
+  testnet = bytes([0x54])
   ripemd = RIPEMD.new(master.PublicKey())
   pubhash = ripemd.digest()
   checksum = keccak(keccak(testnet + pubhash))[:4]

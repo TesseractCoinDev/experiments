@@ -24,7 +24,7 @@ def gen():
   signing = ecdsa.SigningKey.from_string(private, curve=ecdsa.SECP256k1)
 
   version = bytes([0x54])
-  pub = RIPEMD.new(public)
+  pub = RIPEMD.new(public).digest()
   checksum = keccak(keccak(version + pub))[:4]
   raw = base58.b58encode(version + pub + checksum).decode()
 

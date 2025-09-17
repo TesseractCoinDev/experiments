@@ -45,7 +45,7 @@ Wallet = wallet
 gen()
 Wallet2 = wallet
 publicKey2 = public
-nonce = int(keccak(keccak(publicKey2 + str(time.time()).encode("utf-8"))), 12)
+nonce = int(keccak(keccak(publicKey2)).hex(), 16)
 pnet = AESGCM(publicKey2)
 
 def ptransaction():

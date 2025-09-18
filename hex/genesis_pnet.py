@@ -54,7 +54,7 @@ def ptransaction():
   toAddress = wallet
   fromAddress = wallet2
   fee = (len(timestamp) + len(str(amount)) + len(toAddress) + len(fromAddress)) * 0.001
-  sig = (fee.to_bytes((fee.bit_length() + 7) // 8, "big") + toAddress.encode("utf-8") + fromAddress.encode("utf-8") + timestamp.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big"))
+  sig = (str(fee).encode("utf-8") + toAddress.encode("utf-8") + fromAddress.encode("utf-8") + timestamp.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big"))
   signature = Signature.sign_digest(sig)
   txid = keccak(keccak(sig + signature)).hex()
   

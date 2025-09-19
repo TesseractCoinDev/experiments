@@ -62,11 +62,8 @@ def ptransaction():
   amountE = pnet.encrypt(nonce, amount.to_bytes((amount.bit_length() + 7) // 8, "big"), None).hex()
   toAddressE = pnet.encrypt(nonce, toAddress.encode("utf-8"), None).hex()
   fromAddressE = pnet.encrypt(nonce, fromAddress.encode("utf-8"), None).hex()
-  signatureE = pnet.encrypt(nonce, signature, None).hex()
 
-  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "to": toAddressE, "from": fromAddressE, "signature": signatureE, "txid": txid}
+  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "fee": str(fee), "to": toAddressE, "from": fromAddressE, "signature": signature.hex(), "txid": txid}
 
 def display():
-  print(colored(ptransaction(), "yellow", attrs=["bold"]))
-
-display()
+  print(colored(ptransaction(), "green", attrs=["bold"]))

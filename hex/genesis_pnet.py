@@ -67,3 +67,5 @@ def ptransaction():
 
 def display():
   print(colored(ptransaction(), "green", attrs=["bold"]))
+
+display()

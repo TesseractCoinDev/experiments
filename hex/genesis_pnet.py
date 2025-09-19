@@ -45,26 +45,28 @@ Wallet = wallet
 gen()
 Wallet2 = wallet
 publicKey2 = public
-nonce = keccak(publicKey2)[:12]
-pnet = AESGCM(publicKey2)
+nonce = os.urandom(12)
+pnet = AESGCM(keccak(publicKey2))
 
 def ptransaction():
   timestamp = str(time.time())
   amount = random.randint(1, 10000)
   toAddress = wallet
-  fromAddress = wallet2
+  fromAddress = Wallet2
   fee = (len(timestamp) + len(str(amount)) + len(toAddress) + len(fromAddress)) * 0.001
-  sig = (str(fee).encode("utf-8") + toAddress.encode("utf-8") + fromAddress.encode("utf-8") + timestamp.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big"))
+  sig = keccak((str(fee).encode("utf-8") + toAddress.encode("utf-8") + fromAddress.encode("utf-8") + timestamp.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big")))
   signature = Signature.sign_digest(sig)
   txid = keccak(keccak(sig + signature)).hex()
   
-  timestampE = pnet.encrypt(timestamp.encode("utf-8"), nonce, None).hex()
-  amountE = pnet.encrypt(amount.to_bytes((amount.bit_length() + 7) // 8, "big"), nonce, None).hex()
-  toAddressE = pnet.encrypt(toAddress.encode("utf-8"), nonce, None).hex()
-  fromAddressE = pnet.encrypt(fromAddress.encode("utf-8"), nonce, None).hex()
-  signatureE = pnet.encrypt(signature, nonce, None).hex()
+  timestampE = pnet.encrypt(nonce, timestamp.encode("utf-8"), None).hex()
+  amountE = pnet.encrypt(nonce, amount.to_bytes((amount.bit_length() + 7) // 8, "big"), None).hex()
+  toAddressE = pnet.encrypt(nonce, toAddress.encode("utf-8"), None).hex()
+  fromAddressE = pnet.encrypt(nonce, fromAddress.encode("utf-8"), None).hex()
+  signatureE = pnet.encrypt(nonce, signature, None).hex()
 
-  return {"timestamp": timestampE, "amount": amountE, "to": toAddressE, "from": fromAddressE, "signature": signatureE, "txid": txid}
+  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "to": toAddressE, "from": fromAddressE, "signature": signatureE, "txid": txid}
 
 def display():
   print(colored(ptransaction(), "green", attrs=["bold"]))
+
+display()

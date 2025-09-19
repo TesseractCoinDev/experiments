@@ -66,6 +66,4 @@ def ptransaction():
   return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "fee": str(fee), "to": toAddressE, "from": fromAddressE, "signature": signature.hex(), "txid": txid}
 
 def display():
-  print(colored(ptransaction(), "green", attrs=["bold"]))
-
-display()
+  print(colored(ptransaction(), "yellow", attrs=["bold"]))

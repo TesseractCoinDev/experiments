@@ -10,7 +10,7 @@ import time
 import os
 
 subdifficulty = 100000 * 0.028
-subtarget = 2**256 // round(subdifficulty)
+subtarget = (2**224) * ((2**32) - 1) // round(subdifficulty)
 mnemonics = Mnemonic("english")
 
 def genadd():

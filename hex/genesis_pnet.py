@@ -66,7 +66,7 @@ def ptransaction():
   toAddressE = pnet.encrypt(nonce, toAddress.encode("utf-8"), None).hex()
   fromAddressE = pnet.encrypt(nonce, fromAddress.encode("utf-8"), None).hex()
 
-  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "fee": str(fee), "to": toAddressE, "from": fromAddressE, "signature": signature.hex(), "txid": txid}, txid
+  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "fee": str(fee), "to": toAddressE, "from": fromAddressE, "signature": signature.hex(), "txid": txid.hex()}, txid
 
 def partition():
   version = 1

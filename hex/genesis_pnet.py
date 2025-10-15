@@ -105,7 +105,7 @@ def hex():
   merkleRoot = partitions[0]
   hexHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleRoot + height.to_bytes((height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
   hexData =  {
-    "header": {"version": version, "network": "pNET", "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
+    "header": {"version": version, "network": "xts-pnet", "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
     "body": [partition()[0] for _ in range(768)]
   }
   with open("genesis_pnet.json", "w") as w:

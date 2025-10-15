@@ -6,6 +6,7 @@ from mnemonic import Mnemonic
 from eth_utils import keccak
 import random
 import base58
+import json
 import ecdsa
 import time
 import os
@@ -109,6 +110,6 @@ def hex():
     "body": [partition()[0] for _ in range(768)]
   }
   with open("genesis_pnet.json", "w") as w:
-    w.write(hexData)
+    json.dump(hexData, w, indent=4)
 
 hex()

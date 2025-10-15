@@ -1,6 +1,7 @@
 {
     "header": {
         "version": 1,
+        "network": "xts-main",
         "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
         "height": 1,
         "merkleRoot": "c24cf7235904af9a4b1ec56f62b2258d2952b8bfca322534df42cff1bbee882e",

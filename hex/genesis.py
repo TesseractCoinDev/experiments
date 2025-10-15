@@ -49,8 +49,7 @@ def transaction():
   fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.0001
   signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))
   txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + signature)
-  weight = len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp) + len(str(fee)) + len(signature.hex()) + len(txid.hex())
-  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature.hex(), "txid": txid.hex()}, txid, weight
+  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature.hex(), "txid": txid.hex()}, txid
 
 def partition():
   version = 1
@@ -68,12 +67,11 @@ def partition():
       txids = merklep
   merkleRoot = txids[0]  
   partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
-  weight = len(str(version)) + len(merkleRoot.hex()) + len(sub_target.hex()) + len(str(nonce)) + len(partitionHash.hex())
   partitionData =  {
     "header": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()},
     "body": [transaction()[0] for _ in range(transactioneq)]
   }
-  return partitionData, partitionHash, weight
+  return partitionData, partitionHash
 
 def hex():
   version = 1
@@ -90,26 +88,10 @@ def hex():
       partitions = merkleh
   merkleRoot = partitions[0]
   hexHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleRoot + height.to_bytes((height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
-  weight = len(str(version)) + len(prevHash) + len(str(height)) + len(merkleRoot.hex()) + len(timestamp) + len(hexHash)
   hexData =  {
-    "header": {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
+    "header": {"version": version, "network": "xts-main", "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
     "body": [partition()[0] for _ in range(768)]
   }
   with open("genesis.json", "w") as w:
     w.write(hexData)
-  return hexData, weight
-
-def display():
-  print(colored(f"HEX HEADER ({str(hex()[1])} BITS): ", "white", attrs=["bold"]))
-  print(colored(hex()[0], "green", attrs=["bold"]))
-  print("")
-  print(colored(f"PARTITION HEADER ({str(partition()[2])} BITS):", "white", attrs=["bold"]))
-  print(colored(partition()[0], "green", attrs=["bold"]))
-  print("")
-  print(colored(f"TRANSACTION METADATA ({str(transaction()[2])} BITS):", "white", attrs=["bold"]))
-  print(colored(transaction()[0], "green", attrs=["bold"]))
-  print("")
-  print(colored("STATS:", "white", attrs=["bold"]))
-  equ = ((hex()[1]) + (partition()[2] * 768) + (transaction()[2] * 35951)) / 8
-  percent = (equ / 1500000) * 100
-  print(colored(f"TOTAL SIZE: {str(equ)} OF 1,500,000 BYTES, APPROXIMATELY {str(percent)}% OF THE 1.5 MB CAP.", "white", attrs=["bold"]))
+  return hexData

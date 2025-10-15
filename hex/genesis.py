@@ -6,6 +6,7 @@ from eth_utils import keccak
 import base58
 import random
 import ecdsa
+import json
 import time
 import os
 
@@ -96,6 +97,8 @@ def hex():
     "header": {"version": version, "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
     "body": [partition()[0] for _ in range(768)]
   }
+  with open("genesis.json", "w") as w:
+    w.write(hexData)
   return hexData, weight
 
 def display():

@@ -70,7 +70,7 @@ def partition():
   partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
   weight = len(str(version)) + len(merkleRoot.hex()) + len(sub_target.hex()) + len(str(nonce)) + len(partitionHash.hex())
   partitionData =  {
-    "header": {"version": version, "merkleRoot": merkleRoot.hex(), "difficultyTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()},
+    "header": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()},
     "body": [transaction()[0] for _ in range(transactioneq)]
   }
   return partitionData, partitionHash, weight

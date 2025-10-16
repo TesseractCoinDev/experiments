@@ -36,7 +36,7 @@ def gen():
   puB = extraction[1:21]
   checkSum = extraction[21:25]
   if keccak(keccak(version + pub))[:4] == checkSum:
-    wallet = "X" + raw + "TST"
+    wallet = "X" + raw + "TSP"
     return wallet
   else:
     wallet = "Invalid"
@@ -63,10 +63,8 @@ def ptransaction():
   
   timestampE = pnet.encrypt(nonce, timestamp.encode("utf-8"), None).hex()
   amountE = pnet.encrypt(nonce, amount.to_bytes((amount.bit_length() + 7) // 8, "big"), None).hex()
-  toAddressE = pnet.encrypt(nonce, toAddress.encode("utf-8"), None).hex()
-  fromAddressE = pnet.encrypt(nonce, fromAddress.encode("utf-8"), None).hex()
 
-  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "fee": str(fee), "to": toAddressE, "from": fromAddressE, "signature": signature.hex(), "txid": txid.hex()}, txid
+  return {"nonce": nonce.hex(), "timestamp": timestampE, "amount": amountE, "fee": str(fee), "to": toAddress, "from": fromAddress, "signature": signature.hex(), "txid": txid.hex()}, txid
 
 def partition():
   version = 1

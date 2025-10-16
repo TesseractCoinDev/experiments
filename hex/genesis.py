@@ -94,4 +94,3 @@ def hex():
   }
   with open("genesis.json", "w") as w:
     w.write(hexData)
-  return hexData

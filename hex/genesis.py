@@ -67,7 +67,7 @@ def partition():
           merklep.append(keccak(txids[p] + txids[p+1]))
       txids = merklep
   merkleRoot = txids[0]  
-  partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
+  partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(32, "big") + extraNonce.to_bytes(32, "big") + sub_target + merkleRoot))
   partitionData =  {
     "header": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "partitionHash": partitionHash.hex()},
     "body": [transaction()[0] for _ in range(transactioneq)]
@@ -94,4 +94,4 @@ def hex():
     "body": [partition()[0] for _ in range(768)]
   }
   with open("genesis.json", "w") as w:
-    w.write(hexData)
+    json.dump(hexData, w, indent=4)

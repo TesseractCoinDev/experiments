@@ -72,6 +72,7 @@ def partition():
   version = 1
   timestamp = str(time.time())
   nonce = random.getrandbits(80)
+  extraNonce = 0
   sub_target = subtarget.to_bytes((subtarget.bit_length() + 7) // 8, "big")
   transactioneq = 35951 // 768
   txids = [ptransaction()[1] for _ in range(transactioneq)]
@@ -85,7 +86,7 @@ def partition():
   merkleRoot = txids[0]  
   partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(10, "big") + sub_target + merkleRoot))
   partitionData =  {
-    "partitionHeader": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "partitionHash": partitionHash.hex()},
+    "partitionHeader": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "partitionHash": partitionHash.hex()},
     "partitionBody": [ptransaction()[0] for _ in range(transactioneq)]
   }
   return partitionData, partitionHash

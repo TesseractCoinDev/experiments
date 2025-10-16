@@ -95,3 +95,5 @@ def hex():
   }
   with open("genesis.json", "w") as w:
     json.dump(hexData, w, indent=4)
+
+hex()

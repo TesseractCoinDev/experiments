@@ -69,8 +69,8 @@ def partition():
   merkleRoot = txids[0]  
   partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(80, "big") + extraNonce.to_bytes(80, "big") + sub_target + merkleRoot))
   partitionData =  {
-    "header": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "partitionHash": partitionHash.hex()},
-    "body": [transaction()[0] for _ in range(transactioneq)]
+    "partitionHeader": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "partitionHash": partitionHash.hex()},
+    "partitionBody": [transaction()[0] for _ in range(transactioneq)]
   }
   return partitionData, partitionHash
 

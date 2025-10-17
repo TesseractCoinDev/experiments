@@ -56,7 +56,7 @@ def ptransaction():
   amount = random.randint(1, 10000)
   toAddress = wallet
   fromAddress = Wallet2
-  fee = (len(timestamp) + len(str(amount)) + len(toAddress) + len(fromAddress)) * 0.001
+  fee = (len(timestamp) + len(str(amount)) + len(toAddress) + len(fromAddress)) * 0.00001
   sig = keccak((str(fee).encode("utf-8") + toAddress.encode("utf-8") + fromAddress.encode("utf-8") + timestamp.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big")))
   signature = Signature.sign_digest(sig)
   txid = keccak(keccak(sig + signature + nonce))

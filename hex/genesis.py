@@ -46,7 +46,7 @@ def transaction():
   fromAddress = genadd()[0]
   amount = random.randint(1, 10000)
   timestamp = str(time.time())
-  fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.0001
+  fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.00001
   signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))
   txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + signature)
   return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature.hex(), "txid": txid.hex()}, txid

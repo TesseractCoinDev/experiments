@@ -3,7 +3,6 @@ from bip32utils import BIP32Key
 from mnemonic import Mnemonic
 from termcolor import colored
 from eth_utils import keccak
-from decimal import Decimal
 import base58
 import random
 import ecdsa
@@ -50,12 +49,11 @@ def transaction():
   fromAddress = genadd()[0]
   amount = random.randint(1, 10000)
   timestamp = str(time.time())
-  f = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.00001
-  fee = Decimal(f)
+  fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.00001
   nonce += 1
   signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))
   txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + nonce.to_bytes((nonce.bit_length() + 7) // 8, "big") + signature)
-  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "nonce": nonce, "signature": signature.hex(), "txid": txid.hex()}, txid
+  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": str(fee), "nonce": nonce, "signature": signature.hex(), "txid": txid.hex()}, txid
 
 def partition():
   version = 1

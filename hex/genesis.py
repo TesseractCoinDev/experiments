@@ -67,10 +67,9 @@ def partition():
           merklep.append(keccak(txids[p] + txids[p+1]))
       txids = merklep
   merkleRoot = txids[0]  
-  signature = signing.sign_digest(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(80, "big") + extraNonce.to_bytes(80, "big") + sub_target + merkleRoot))
-  partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(80, "big") + extraNonce.to_bytes(80, "big") + sub_target + merkleRoot + signature))
+  partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(80, "big") + extraNonce.to_bytes(80, "big") + sub_target + merkleRoot))
   partitionData =  {
-    "partitionHeader": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "signature": signature.hex(), "partitionHash": partitionHash.hex()},
+    "partitionHeader": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "partitionHash": partitionHash.hex()},
     "partitionBody": [transaction()[0] for _ in range(transactioneq)]
   }
   return partitionData, partitionHash
@@ -89,10 +88,9 @@ def hex():
           merkleh.append(keccak(partitions[h] + partitions[h+1]))
       partitions = merkleh
   merkleRoot = partitions[0]
-  signature = signing.sign_digest(keccak(version.to_bytes(4, "big") + height.to_bytes(4, "big") + prevHash.encode("utf-8") + timestamp.encode("utf-8") + merkleRoot))
   hexHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + merkleRoot + height.to_bytes((height.bit_length() + 7) // 8, "big") + bytes.fromhex(prevHash)))
   hexData =  {
-    "header": {"version": version, "network": "xts-main", "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "signature": signature.hex(), "hexHash": hexHash.hex()},
+    "header": {"version": version, "network": "xts-main", "prevHash": prevHash, "height": height, "merkleRoot": merkleRoot.hex(), "timestamp": timestamp, "hexHash": hexHash.hex()},
     "body": [partition()[0] for _ in range(768)]
   }
   with open("genesis.json", "w") as w:

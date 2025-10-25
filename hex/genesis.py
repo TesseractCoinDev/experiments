@@ -1,8 +1,9 @@
+from Crypto.Hash import RIPEMD160
 from bip32utils import BIP32Key
-from Crypto.Hash import RIPEMD
 from mnemonic import Mnemonic
 from termcolor import colored
 from eth_utils import keccak
+from decimal import Decimal
 import base58
 import random
 import ecdsa
@@ -26,7 +27,7 @@ def genadd():
   signing = ecdsa.SigningKey.from_string(private, curve=ecdsa.SECP256k1)
 
   testnet = bytes([0x54])
-  ripemd = RIPEMD.new(master.PublicKey())
+  ripemd = RIPEMD160.new(master.PublicKey())
   pubhash = ripemd.digest()
   checksum = keccak(keccak(testnet + pubhash))[:4]
   pre = base58.b58encode(testnet + pubhash + checksum).decode()
@@ -41,15 +42,20 @@ def genadd():
   else:
     return "Invalid"
 
+nonce = 0
+
 def transaction():
+  global nonce
   toAddress = genadd()[0]
   fromAddress = genadd()[0]
   amount = random.randint(1, 10000)
   timestamp = str(time.time())
-  fee = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.00001
+  f = (len(toAddress) + len(fromAddress) + len(str(amount)) + len(timestamp)) * 0.00001
+  fee = Decimal(f)
+  nonce += 1
   signature = signing.sign_digest(keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8")))
-  txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + signature)
-  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "signature": signature.hex(), "txid": txid.hex()}, txid
+  txid = keccak(toAddress.encode("utf-8") + fromAddress.encode("utf-8") + amount.to_bytes((amount.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + str(fee).encode("utf-8") + nonce.to_bytes((nonce.bit_length() + 7) // 8, "big") + signature)
+  return {"to": toAddress, "from": fromAddress, "amount": amount, "timestamp": timestamp, "fee": fee, "nonce": nonce, "signature": signature.hex(), "txid": txid.hex()}, txid
 
 def partition():
   version = 1
@@ -67,7 +73,7 @@ def partition():
           merklep.append(keccak(txids[p] + txids[p+1]))
       txids = merklep
   merkleRoot = txids[0]  
-  partitionHash = keccak(keccak(version.to_bytes(4, "big") + timestamp.encode("utf-8") + nonce.to_bytes(80, "big") + extraNonce.to_bytes(80, "big") + sub_target + merkleRoot))
+  partitionHash = keccak(keccak(version.to_bytes((version.bit_length() + 7) // 8, "big") + timestamp.encode("utf-8") + nonce.to_bytes((nonce.bit_length() + 7) // 8, "big") + extraNonce.to_bytes((extraNonce.bit_length() + 7) // 8, "big") + sub_target + merkleRoot))
   partitionData =  {
     "partitionHeader": {"version": version, "merkleRoot": merkleRoot.hex(), "subTarget": sub_target.hex(), "nonce": nonce, "extraNonce": extraNonce, "partitionHash": partitionHash.hex()},
     "partitionBody": [transaction()[0] for _ in range(transactioneq)]

@@ -1,0 +1,13 @@
+{
+  "header": {
+    "verison": 1,
+    "height": 0,
+    "prevHashes": [],
+    "merkleRoot": null,
+    "timestamp": null,
+    "beneficiary": null,
+    "mixHash": null,
+    "difficulty": null,
+  },
+  "body": []
+}

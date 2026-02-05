@@ -5,9 +5,8 @@
     "prevHashes": [],
     "merkleRoot": null,
     "timestamp": null,
-    "beneficiary": null,
     "mixHash": null,
-    "difficulty": null,
+    "difficulty": null
   },
   "body": []
 }

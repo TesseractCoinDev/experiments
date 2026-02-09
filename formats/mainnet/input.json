@@ -1,7 +1,6 @@
 {
   "txid": null,
-  "version": 0,
-  "lock": 0,
-  "inputs": [],
-  "outputs": []
+  "vout": null,
+  "scriptSig": null,
+  "sequence": 0
 }

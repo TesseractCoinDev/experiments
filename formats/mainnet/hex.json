@@ -2,10 +2,7 @@
   "header": {
     "verison": 1,
     "prevHashes": [],
-    "merkleRoot": null,
-    "timestamp": null,
-    "mixHash": null,
-    "difficulty": null
+    "merkleRoot": null
   },
-  "body": []
+  "partitions": []
 }

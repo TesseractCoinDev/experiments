@@ -2,6 +2,7 @@
   "txid": null
   "version": 1,
   "lock": 0,
+  "extraNonce": 0,
   "inputs": [],
   "outputs": []
 }
